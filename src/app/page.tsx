@@ -1,37 +1,30 @@
 "use client";
-import Link from "next/link";
 import { useState, useEffect, ChangeEvent } from "react";
-import axios from "axios";
+import { getUsers, User } from "@/services/api";
 
-interface User {
-  id: number;
-  username: string;
-}
 export default function Home() {
   const [data, setData] = useState<User[]>([]);
 
   useEffect(() => {
-    getQuote();
+    fetchUsers();
   }, []);
 
-  const getQuote = async () => {
+  const fetchUsers = async () => {
     try {
-      const response = await axios.get(
-        "https://jsonplaceholder.typicode.com/users"
-      );
-      setData(response.data);
-    } catch (error: any) {
-      alert(error.message);
+      const users = await getUsers();
+      setData(users);
+    } catch (error) {
+      alert(error);
     }
   };
+
   return (
     <div className="">
-      {/* <div className="">merhaba dunya</div> */}
+      <div className="">merhaba dunya</div>
       <div>
-        {data.map((user) => {
-          <p key={user.id}>{user.username}</p>;
-          // console.log(user.username);
-        })}
+        {data.map((user) => (
+          <div key={user.id}>{user.username}</div>
+        ))}
       </div>
     </div>
   );
