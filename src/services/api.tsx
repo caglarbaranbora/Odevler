@@ -1,15 +1,20 @@
 import axios from "axios";
 
-export interface User {
+export interface Character {
   id: number;
-  username: string;
+  name: string;
+  image: string;
 }
 
-const API_URL = "https://jsonplaceholder.typicode.com";
-export const getUsers = async (): Promise<User[]> => {
+const API_URL = "https://rickandmortyapi.com/api";
+export const getCharacters = async (page: number): Promise<Character[]> => {
   try {
-    const response = await axios.get<User[]>(`${API_URL}/users`);
-    return response.data;
+    const response = await axios.get<Character[]>(
+      `${API_URL}/character?page=${page}`
+    );
+    const characters = response.data.results;
+    const totalPages = response.data.info.pages;
+    return { characters, totalPages };
   } catch (error: any) {
     console.log("api hatasi", error.message);
     throw new Error("kullanicilar getirilemedi");
